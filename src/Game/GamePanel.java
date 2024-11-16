@@ -8,7 +8,7 @@ import static Service.Service.save;
 
 
 public class GamePanel extends JPanel implements Runnable{
-    private JLabel timeLabel = new JLabel();
+    private JLabel timeLabel;
     private double time;
     private double readyTime;
     private int targetSize;
@@ -19,7 +19,6 @@ public class GamePanel extends JPanel implements Runnable{
     private int cursor_Y;
     private int target_X;
     private int target_Y;
-    private int leftCircle_X=300;
 
 
     private int level;
@@ -30,14 +29,21 @@ public class GamePanel extends JPanel implements Runnable{
 
     public GamePanel(){
 
+        timeLabel = new JLabel();
+        timeLabel.setLayout(null);
+        timeLabel.setBounds(300, 0, 400, 200);
+        timeLabel.setSize(new Dimension(400,200));
+        timeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        timeLabel.setText("3");
+        add(timeLabel);
 
         initGame(100, Math.toRadians(3.6));
         setBounds(0,0,1000,800);
+        setLayout(null);
         setBackground(Color.white);
         setVisible(true);
 
-
-        add(timeLabel);
 
     }
 
@@ -55,41 +61,54 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     public void run() {
         while(true) {
+            while(true) {
 
-            setCursorCoordinate();
-            timeLabel.setText("시작까지: " + String.format("%.2f", readyTime));
-            repaint();
-            if(isInsideTarget((int)(targetSize/2), cursor_X, cursor_Y, target_X, target_Y)) {
-                readyTime -= 0.016;
-                if(readyTime <= 0) {
-                    break;
+                setCursorCoordinate();
+                timeLabel.setText("countdown: " + String.format("%.2f", readyTime));
+                repaint();
+                if(isInsideTarget((int)(targetSize/2), cursor_X, cursor_Y, target_X, target_Y)) {
+                    readyTime -= 0.016;
+                    if(readyTime <= 0) {
+                        readyTime = 0;
+                        ready = true;
+                        break;
+                    }
+                }
+                else {
+                    readyTime = 3;
+                }
+
+                try {
+                    // 16ms 대기 (약 60fps)
+                    Thread.sleep(16);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-            else {
-                readyTime = 3;
+
+            while (true) {
+                calcTargetCenter();
+
+                timeLabel.setText("countdown: " + String.format("%.2f", time));
+                time -= 0.016;
+                if(time <= 0) {
+                    time = 0;
+                    ready = false;
+                    break;
+                }
+                save(level, time, target_X, target_Y,  cursor_X,  cursor_Y, targetSize/2);
+
+                // 패널 다시 그리기
+                repaint();
+
+                try {
+                    // 16ms 대기 (약 60fps)
+                    Thread.sleep(16);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-
-            try {
-                // 16ms 대기 (약 60fps)
-                Thread.sleep(16);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        while (true) {
-            calcTargetCenter();
-            save(level, time, target_X, target_Y,  cursor_X,  cursor_Y, targetSize/2);
-
-            // 패널 다시 그리기
-            repaint();
-
-            try {
-                // 16ms 대기 (약 60fps)
-                Thread.sleep(16);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            initGame(100, Math.toRadians(3.6));
         }
 
     }
@@ -102,10 +121,9 @@ public class GamePanel extends JPanel implements Runnable{
         this.targetSpeed = speed;
         totalAngle=0;
         readyTime = 3.0;
+        ready = false;
 
-        timeLabel.setText("3");
-        timeLabel.setBounds(500, 400, 800, 200);
-        timeLabel.setSize(new Dimension(800,200));
+        timeLabel.setText(Double.toString(readyTime));
     }
 
     public void calcTargetCenter() {
@@ -132,8 +150,8 @@ public class GamePanel extends JPanel implements Runnable{
             cursor_X = (int) getMousePosition().getX();
             cursor_Y = (int) getMousePosition().getY();
         }catch (NullPointerException e){
-            cursor_X=cursor_X;
-            cursor_Y=cursor_Y;
+//            cursor_X=cursor_X;
+//            cursor_Y=cursor_Y;
         }
     }
 
