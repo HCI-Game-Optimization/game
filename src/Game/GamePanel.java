@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static Service.Service.isInsideTarget;
+import static Service.Service.save;
 
 
 public class GamePanel extends JPanel implements Runnable{
@@ -21,6 +22,7 @@ public class GamePanel extends JPanel implements Runnable{
     private int leftCircle_X=300;
 
 
+    private int level;
     //private double
 
 
@@ -77,6 +79,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         while (true) {
             calcTargetCenter();
+            save(level, time, target_X, target_Y,  cursor_X,  cursor_Y, targetSize/2);
 
             // 패널 다시 그리기
             repaint();
