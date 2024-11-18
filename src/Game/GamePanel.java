@@ -64,6 +64,8 @@ public class GamePanel extends JPanel implements Runnable{
             while(true) {
 
                 setCursorCoordinate();
+                System.out.println("x : " + cursor_X);
+                System.out.println("y : " + cursor_Y);
                 timeLabel.setText("countdown: " + String.format("%.2f", readyTime));
                 repaint();
                 if(isInsideTarget((int)(targetSize/2), cursor_X, cursor_Y, target_X, target_Y)) {
@@ -94,6 +96,12 @@ public class GamePanel extends JPanel implements Runnable{
                 if(time <= 0) {
                     time = 0;
                     ready = false;
+                    break;
+                }
+                setCursorCoordinate();
+                if(cursor_X == -1) {
+                    // 다시 이번 단계 처음으로 이동
+                    // 데이터도 이번 단계 버리기
                     break;
                 }
                 save(level, time, target_X, target_Y,  cursor_X,  cursor_Y, targetSize/2);
@@ -150,8 +158,8 @@ public class GamePanel extends JPanel implements Runnable{
             cursor_X = (int) getMousePosition().getX();
             cursor_Y = (int) getMousePosition().getY();
         }catch (NullPointerException e){
-//            cursor_X=cursor_X;
-//            cursor_Y=cursor_Y;
+            cursor_X = -1;
+            cursor_Y = -1;
         }
     }
 
