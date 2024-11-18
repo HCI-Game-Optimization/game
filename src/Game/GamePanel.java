@@ -152,7 +152,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void initGame(int size, double speed) {
-        time = 11.0;
+        time = 12.0;
         target_X = 500;
         target_Y = 400;
         targetSize = size;
@@ -167,11 +167,17 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void calcInitialSpeed() {
         // 점진적으로 올라가는 속도 업데이트
-        initialSpeed += (targetSpeed*16)/1000;
+        initialSpeed += (targetSpeed*16)/2000;
         totalAngle += initialSpeed;
 
-        target_X = 300 + (int) (200 * Math.cos(totalAngle));
-        target_Y = 400 + (int) (200 * Math.sin(totalAngle));
+        if(totalAngle <= 2*Math.PI ) {
+            target_X = 300 + (int) (200 * Math.cos(totalAngle));
+            target_Y = 400 + (int) (200 * Math.sin(totalAngle));
+        }
+        else if(totalAngle > 2 * Math.PI) {
+            target_X = 700 + (int) (200 * Math.cos(totalAngle- Math.PI));
+            target_Y = 400 - (int) (200 * Math.sin(totalAngle-Math.PI));
+        }
     }
 
     public void calcTargetCenter() {
