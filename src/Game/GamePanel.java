@@ -9,10 +9,11 @@ import static Service.Service.save;
 
 public class GamePanel extends JPanel implements Runnable{
     private JLabel timeLabel;
-    private double time;
     private double readyTime;
+    private double time;
     private int targetSize;
     private double targetSpeed;
+    private double initialSpeed;
     private double totalAngle;
     private boolean ready;
     private int cursor_X;
@@ -88,6 +89,35 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
 
+            while(true) {
+                // 1초간 점진적으로 속도 올라감
+                calcInitialSpeed();
+
+                timeLabel.setText("countdown: " + String.format("%.2f", time));
+
+                time -= 0.016;
+                if(time <= 10) {
+                    time = 10.0;
+                    break;
+                }
+
+                setCursorCoordinate();
+                if(cursor_X == -1) {
+                    // 다시 이번 단계 처음으로 이동
+                    // 데이터도 이번 단계 버리기
+                    break;
+                }
+
+                repaint();
+
+                try {
+                    // 16ms 대기 (약 60fps)
+                    Thread.sleep(16);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             while (true) {
                 calcTargetCenter();
 
@@ -122,16 +152,26 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void initGame(int size, double speed) {
-        time = 10.0;
+        time = 11.0;
         target_X = 500;
         target_Y = 400;
-        this.targetSize = size;
-        this.targetSpeed = speed;
+        targetSize = size;
+        targetSpeed = speed;
+        initialSpeed = 0.0;
         totalAngle=0;
         readyTime = 3.0;
         ready = false;
 
         timeLabel.setText(Double.toString(readyTime));
+    }
+
+    public void calcInitialSpeed() {
+        // 점진적으로 올라가는 속도 업데이트
+        initialSpeed += (targetSpeed*16)/1000;
+        totalAngle += initialSpeed;
+
+        target_X = 300 + (int) (200 * Math.cos(totalAngle));
+        target_Y = 400 + (int) (200 * Math.sin(totalAngle));
     }
 
     public void calcTargetCenter() {
