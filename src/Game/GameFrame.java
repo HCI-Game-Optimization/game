@@ -20,6 +20,8 @@ public class GameFrame extends JFrame {
 
         add(gamePanel);
 
+        setUndecorated(true);
+
         setVisible(true);
 
         Thread thread=new Thread(gamePanel);
