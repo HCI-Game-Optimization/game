@@ -1,5 +1,7 @@
 package Game;
 
+import Service.Service;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,6 +23,7 @@ public class GamePanel extends JPanel implements Runnable{
     private int cursor_Y;
     private int target_X;
     private int target_Y;
+    private int sequence;
 
 
     private int level;
@@ -29,7 +32,8 @@ public class GamePanel extends JPanel implements Runnable{
 
 
 
-    public GamePanel(){
+    public GamePanel(int sequence){
+        this.sequence = sequence;
 
         timeLabel = new JLabel();
         timeLabel.setLayout(null);
@@ -51,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable{
         levelLabel.setText("level: " + level + "/16");
         add(levelLabel);
 
-        initGame(100, Math.toRadians(3.6));
+        initGame();
         setBounds(0,0,1000,800);
         setLayout(null);
         setBackground(Color.white);
@@ -77,8 +81,6 @@ public class GamePanel extends JPanel implements Runnable{
             while(true) {
 
                 setCursorCoordinate();
-                System.out.println("x : " + cursor_X);
-                System.out.println("y : " + cursor_Y);
                 timeLabel.setText("countdown: " + String.format("%.2f", readyTime));
                 repaint();
                 if(isInsideTarget((int)(targetSize/2), cursor_X, cursor_Y, target_X, target_Y)) {
@@ -158,22 +160,22 @@ public class GamePanel extends JPanel implements Runnable{
                     e.printStackTrace();
                 }
             }
-            initGame(100, Math.toRadians(3.6));
+            initGame();
         }
 
     }
 
-    public void initGame(int size, double speed) {
+    public void initGame() {
         time = 12.0;
         target_X = 500;
         target_Y = 400;
-        targetSize = size;
-        targetSpeed = speed;
+        level += 1;
+        targetSize = Service.getSize(sequence, level);
+        targetSpeed = Math.toRadians(Service.getSpeed(sequence, level));
         initialSpeed = 0.0;
         totalAngle=0;
         readyTime = 3.0;
         ready = false;
-        level += 1;
 
         timeLabel.setText(Double.toString(readyTime));
         levelLabel.setText("level: " + level + "/16");

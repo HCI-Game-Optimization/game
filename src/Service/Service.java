@@ -1,8 +1,6 @@
 package Service;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class Service {
 
@@ -18,6 +16,77 @@ public class Service {
 
     public static boolean isInsideTarget(double r, int cursorX, int cursorY, int targetX, int targetY) {
         return distance(cursorX,cursorY,targetX,targetY)<=r;
+    }
+
+    public static double getSpeed(int sequence, int level) {
+        String filePath = "src/Data/balanced_ratin_square.txt";
+        String ID = "";
+        double speed = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            // 파일에서 한 줄씩 읽기
+            while ((line = br.readLine()) != null) {
+                if(line.equals("sequence = " + sequence)) {
+                    ID = br.readLine().substring(level, level+1);
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        filePath = "src/Data/ID.txt";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            // 파일에서 한 줄씩 읽기
+            while ((line = br.readLine()) != null) {
+                if(line.equals("ID = " + ID)) {
+                    speed = Double.parseDouble(br.readLine().split(" ")[2]);
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return speed;
+    }
+
+    public static int getSize(int sequence, int level) {
+        String filePath = "src/Data/balanced_ratin_square.txt";
+        String ID = "";
+        int size = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            // 파일에서 한 줄씩 읽기
+            while ((line = br.readLine()) != null) {
+                if(line.equals("sequence = " + sequence)) {
+                    ID = br.readLine().substring(level, level+1);
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        filePath = "src/Data/ID.txt";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            // 파일에서 한 줄씩 읽기
+            while ((line = br.readLine()) != null) {
+                if(line.equals("ID = " + ID)) {
+                    br.readLine();
+                    size = Integer.parseInt(br.readLine().split(" ")[2]);
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return size;
     }
 
     public static void createNewData() {

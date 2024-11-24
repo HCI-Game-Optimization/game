@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameFrame extends JFrame {
-    private int gameSequence;
     private GamePanel gamePanel;
 
     public GameFrame(int sequence){
@@ -16,15 +15,13 @@ public class GameFrame extends JFrame {
 
 
 
-        gamePanel=new GamePanel();
+        gamePanel=new GamePanel(sequence);
 
         add(gamePanel);
 
         setUndecorated(true);
 
         setVisible(true);
-
-        gameSequence = sequence;
 
     }
 
