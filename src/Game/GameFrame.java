@@ -5,18 +5,18 @@ import java.awt.*;
 
 public class GameFrame extends JFrame {
     private int gameSequence;
+    private GamePanel gamePanel;
 
-    public GameFrame(){
+    public GameFrame(int sequence){
         setTitle("TARGETING GAME");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLocationRelativeTo(null);
-//        setLayout(new BorderLayout());
         setLayout(null);
 
 
 
-        GamePanel gamePanel=new GamePanel();
+        gamePanel=new GamePanel();
 
         add(gamePanel);
 
@@ -24,10 +24,12 @@ public class GameFrame extends JFrame {
 
         setVisible(true);
 
-        Thread thread=new Thread(gamePanel);
-        thread.run();
+        gameSequence = sequence;
 
-        gameSequence = 0;
+    }
 
+    public void threadRun() {
+        Thread thread = new Thread(gamePanel);
+        thread.start();
     }
 }

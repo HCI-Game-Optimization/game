@@ -9,6 +9,7 @@ import static Service.Service.save;
 
 public class GamePanel extends JPanel implements Runnable{
     private JLabel timeLabel;
+    private JLabel levelLabel;
     private double readyTime;
     private double time;
     private int targetSize;
@@ -38,6 +39,17 @@ public class GamePanel extends JPanel implements Runnable{
         timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timeLabel.setText("3");
         add(timeLabel);
+
+        level = 0;
+
+        levelLabel = new JLabel();
+        levelLabel.setLayout(null);
+        levelLabel.setBounds(0, 0, 400, 200);
+        levelLabel.setSize(new Dimension(400,200));
+        levelLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        levelLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        levelLabel.setText("level: " + level + "/16");
+        add(levelLabel);
 
         initGame(100, Math.toRadians(3.6));
         setBounds(0,0,1000,800);
@@ -161,8 +173,10 @@ public class GamePanel extends JPanel implements Runnable{
         totalAngle=0;
         readyTime = 3.0;
         ready = false;
+        level += 1;
 
         timeLabel.setText(Double.toString(readyTime));
+        levelLabel.setText("level: " + level + "/16");
     }
 
     public void calcInitialSpeed() {
