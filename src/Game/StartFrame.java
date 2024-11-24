@@ -4,6 +4,8 @@ import Service.Service;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class StartFrame extends JFrame {
 
@@ -67,22 +69,38 @@ public class StartFrame extends JFrame {
         startButton.setOpaque(true); // 배경색이 적용되도록 설정
 
         // 버튼에 마우스를 올렸을 때 색상 변화
-        startButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        startButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
                 startButton.setBackground(new Color(70, 70, 70)); // 마우스를 올렸을 때 배경색 변경 (중간 회색)
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 startButton.setBackground(new Color(50, 50, 50)); // 마우스를 떼었을 때 배경색 원래대로 (어두운 회색)
             }
 
-            public void mousePressed(java.awt.event.MouseEvent evt) {
+            public void mousePressed(MouseEvent evt) {
                 startButton.setBackground(new Color(30, 30, 30)); // 마우스를 클릭했을 때 배경색 변경
             }
 
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
+            public void mouseReleased(MouseEvent evt) {
                 startButton.setBackground(new Color(70, 70, 70)); // 마우스를 떼었을 때 배경색 변경
-                startGame(Integer.parseInt(orderField.getText()));
+
+                // 입력 값이 정수이고 1과 8 사이인지 확인
+                try {
+                    int order = Integer.parseInt(orderField.getText());
+                    if (order < 1 || order > 8) {
+                        // 범위 밖 숫자일 경우 경고 메시지와 orderField 초기화
+                        JOptionPane.showMessageDialog(null, "유효한 숫자를 입력하세요 (1과 8 사이)", "경고", JOptionPane.WARNING_MESSAGE);
+                        orderField.setText(""); // 텍스트 필드 비우기
+                    } else {
+                        // 유효한 숫자일 경우 게임 시작
+                        startGame(order);
+                    }
+                } catch (NumberFormatException e) {
+                    // 숫자가 아닌 값을 입력했을 경우 경고 메시지와 orderField 초기화
+                    JOptionPane.showMessageDialog(null, "유효한 숫자를 입력하세요", "경고", JOptionPane.WARNING_MESSAGE);
+                    orderField.setText(""); // 텍스트 필드 비우기
+                }
             }
         });
 
