@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable{
         timeLabel.setText("3");
         add(timeLabel);
 
-        level = 0;
+        level = -1;
 
         levelLabel = new JLabel();
         levelLabel.setLayout(null);
@@ -78,6 +78,7 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     public void run() {
         while(true) {
+            boolean isBreak;
             while(true) {
 
                 setCursorCoordinate();
@@ -112,13 +113,16 @@ public class GamePanel extends JPanel implements Runnable{
                 time -= 0.016;
                 if(time <= 10) {
                     time = 10.0;
+                    isBreak = false;
                     break;
                 }
 
                 setCursorCoordinate();
                 if(cursor_X == -1) {
                     // 다시 이번 단계 처음으로 이동
+                    level -= 1;
                     // 데이터도 이번 단계 버리기
+                    isBreak = true;
                     break;
                 }
 
@@ -130,6 +134,10 @@ public class GamePanel extends JPanel implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+            if(isBreak) {
+                initGame();
+                continue;
             }
 
             while (true) {
@@ -145,6 +153,7 @@ public class GamePanel extends JPanel implements Runnable{
                 setCursorCoordinate();
                 if(cursor_X == -1) {
                     // 다시 이번 단계 처음으로 이동
+                    level -= 1;
                     // 데이터도 이번 단계 버리기
                     break;
                 }
