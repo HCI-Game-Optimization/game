@@ -68,9 +68,17 @@ public class GamePanel extends JPanel implements Runnable{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         setLayout(null);
-        g.drawOval(target_X-targetSize/2,target_Y-targetSize/2,targetSize,targetSize); //draw target
+        //g.drawOval(target_X-targetSize/2,target_Y-targetSize/2,targetSize,targetSize); //draw target
         g.drawOval(100,200,400,400); //left circle
         g.drawOval(500,200,400,400); //right circle
+
+        if(Service.isInsideTarget(targetSize/2, cursor_X, cursor_Y, target_X, target_Y)){
+            g.setColor(Color.green);
+        }
+        else{
+            g.setColor(Color.red);
+        }
+        g.fillOval(target_X-targetSize/2,target_Y-targetSize/2,targetSize,targetSize);
     }
 
     //speed : 4 6 8 10 per 10 seconds
