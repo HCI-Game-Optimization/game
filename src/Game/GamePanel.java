@@ -82,7 +82,7 @@ public class GamePanel extends JPanel implements Runnable{
             while(true) {
 
                 setCursorCoordinate();
-                timeLabel.setText("countdown: " + String.format("%.2f", readyTime));
+                timeLabel.setText("countdown: " + String.format("%.0f", readyTime));
                 repaint();
                 if(isInsideTarget((int)(targetSize/2), cursor_X, cursor_Y, target_X, target_Y)) {
                     readyTime -= 0.016;
@@ -108,7 +108,7 @@ public class GamePanel extends JPanel implements Runnable{
                 // 1초간 점진적으로 속도 올라감
                 calcInitialSpeed();
 
-                timeLabel.setText("countdown: " + String.format("%.2f", time));
+                timeLabel.setText("countdown: " + String.format("%.0f", time));
 
                 time -= 0.016;
                 if(time <= 10) {
@@ -142,7 +142,7 @@ public class GamePanel extends JPanel implements Runnable{
             while (true) {
                 calcTargetCenter();
 
-                timeLabel.setText("countdown: " + String.format("%.2f", time));
+                timeLabel.setText("countdown: " + String.format("%.0f", time));
                 time -= 0.016;
                 if(time <= 0) {
                     time = 0;
@@ -171,12 +171,15 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
             initGame();
+            if(level > 15) {
+                break;
+            }
         }
-
+        System.exit(0);
     }
 
     public void initGame() {
-        time = 12.0;
+        time = 12;
         target_X = 500;
         target_Y = 400;
         level += 1;
