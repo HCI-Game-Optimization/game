@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 
 public class StartFrame extends JFrame {
 
+
     public StartFrame() {
         // 프레임 기본 설정
         setTitle("간단한 네모 칸");
@@ -94,7 +95,7 @@ public class StartFrame extends JFrame {
                         orderField.setText(""); // 텍스트 필드 비우기
                     } else {
                         // 유효한 숫자일 경우 게임 시작
-                        startGame(order);
+                        startGame(nameField.getText(), order);
                     }
                 } catch (NumberFormatException e) {
                     // 숫자가 아닌 값을 입력했을 경우 경고 메시지와 orderField 초기화
@@ -107,8 +108,8 @@ public class StartFrame extends JFrame {
         add(startButton);
     }
 
-    public void startGame(int sequence) {
-        Service.createNewData();
+    public void startGame(String name, int sequence) {
+        Service.createNewData(name, sequence);
         GameFrame gameFrame = new GameFrame(sequence);
         gameFrame.threadRun();
     }

@@ -90,7 +90,7 @@ public class Service {
         return size;
     }
 
-    public static void createNewData() {
+    public static void createNewData(String name, int sequence) {
 
         String fileName = "data.txt";
         String filePath = "./src/Data/" + fileName; // 현재 디렉토리에 생성
@@ -100,12 +100,18 @@ public class Service {
         try {
             // 파일이 이미 존재하지 않으면 생성
             if (file.createNewFile()) {
+                try (FileWriter writer = new FileWriter(file, true)) {
+                    writer.write("이름:" + name + "순서:" + sequence + "\n");
+                }
                 System.out.println(fileName + " 파일이 성공적으로 생성되었습니다.");
             } else {
                 System.out.println(fileName + " 파일이 이미 존재합니다. 삭제 후 다시 생성합니다.");
                 if (file.delete()) {
                     // 삭제 성공 시 파일을 다시 생성
                     if (file.createNewFile()) {
+                        try (FileWriter writer = new FileWriter(file, true)) {
+                            writer.write("이름:" + name + "순서:" + sequence + "\n");
+                        }
                         System.out.println(fileName + " 파일이 다시 생성되었습니다.");
                     } else {
                         System.out.println(fileName + " 파일 생성에 실패했습니다.");
@@ -127,8 +133,7 @@ public class Service {
         String filePath = "./src/Data/" + fileName; // 현재 디렉토리
         File inputFile = new File(filePath);
 
-        // 정규식: 두 번째 값이 0인 줄
-        String regex = "^\\S+ " + Integer.toString(level) + "\\b.*$";
+        String regex = "^" + Integer.toString(level) + "\\s+\\S+\\b.*$";
         Pattern pattern = Pattern.compile(regex);
 
         // 데이터를 임시로 저장할 StringBuilder
@@ -168,8 +173,7 @@ public class Service {
 
         // 작성할 문자열
         String content =
-                sequence + " "
-                + level + " "
+                level + " "
                 + time + " "
                 + targetX + " "
                 + targetY + " "
