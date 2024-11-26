@@ -1,12 +1,12 @@
-package Game;
+package main.java.Game;
 
-import Service.Service;
+import main.java.Service.Service;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static Service.Service.isInsideTarget;
-import static Service.Service.save;
+import static main.java.Service.Service.isInsideTarget;
+import static main.java.Service.Service.save;
 
 
 public class GamePanel extends JPanel implements Runnable{

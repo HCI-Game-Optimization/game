@@ -1,7 +1,6 @@
-package Game;
+package main.java.Game;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class GameFrame extends JFrame {
     private GamePanel gamePanel;

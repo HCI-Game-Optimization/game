@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="HCIGame:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/HCIGame_jar</output-path>
+    <root id="archive" name="HCIGame.jar">
+      <element id="module-output" name="HCIGame" />
+    </root>
+  </artifact>
+</component>

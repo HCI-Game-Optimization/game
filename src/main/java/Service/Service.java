@@ -1,7 +1,10 @@
-package Service;
+package main.java.Service;
 
 import java.io.*;
 import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Objects;
 
 public class Service {
 
@@ -20,11 +23,18 @@ public class Service {
     }
 
     public static double getSpeed(int sequence, int level) {
-        String filePath = "src/Data/balanced_ratin_square.txt";
+        String filePath = "balanced_ratin_square.txt";
         String ID = "";
         double speed = 0;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        // 클래스패스에서 리소스를 가져올 때 경로 앞에 '/'를 추가하여 절대 경로로 지정
+        InputStream inputStream = Service.class.getClassLoader().getResourceAsStream(filePath);
+        if (inputStream == null) {
+            System.out.println("파일을 찾을 수 없습니다: " + filePath);
+            return speed;  // 파일이 없으면 speed를 0으로 반환
+        }
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             // 파일에서 한 줄씩 읽기
             while ((line = br.readLine()) != null) {
@@ -37,9 +47,14 @@ public class Service {
             e.printStackTrace();
         }
 
-        filePath = "src/Data/ID.txt";
+        filePath = "ID.txt";
+        inputStream = Service.class.getClassLoader().getResourceAsStream(filePath);
+        if (inputStream == null) {
+            System.out.println("파일을 찾을 수 없습니다: " + filePath);
+            return speed;  // 파일이 없으면 speed를 0으로 반환
+        }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             // 파일에서 한 줄씩 읽기
             while ((line = br.readLine()) != null) {
@@ -55,16 +70,23 @@ public class Service {
     }
 
     public static int getSize(int sequence, int level) {
-        String filePath = "src/Data/balanced_ratin_square.txt";
+        String filePath = "balanced_ratin_square.txt";
         String ID = "";
         int size = 0;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        // 클래스패스에서 리소스를 가져올 때 경로 앞에 '/'를 추가하여 절대 경로로 지정
+        InputStream inputStream = Service.class.getClassLoader().getResourceAsStream(filePath);
+        if (inputStream == null) {
+            System.out.println("파일을 찾을 수 없습니다: " + filePath);
+            return size;  // 파일이 없으면 size를 0으로 반환
+        }
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             // 파일에서 한 줄씩 읽기
             while ((line = br.readLine()) != null) {
                 if(line.equals("sequence = " + sequence)) {
-                    ID = br.readLine().substring(level, level+1);
+                    ID = br.readLine().substring(level, level + 1);
                     break;
                 }
             }
@@ -72,15 +94,20 @@ public class Service {
             e.printStackTrace();
         }
 
-        filePath = "src/Data/ID.txt";
+        filePath = "ID.txt";
+        inputStream = Service.class.getClassLoader().getResourceAsStream(filePath);
+        if (inputStream == null) {
+            System.out.println("파일을 찾을 수 없습니다: " + filePath);
+            return size;  // 파일이 없으면 size를 0으로 반환
+        }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             // 파일에서 한 줄씩 읽기
             while ((line = br.readLine()) != null) {
                 if(line.equals("ID = " + ID)) {
-                    br.readLine();
-                    size = Integer.parseInt(br.readLine().split(" ")[2]);
+                    br.readLine();  // 해당 ID가 있으면 두 번째 줄을 읽고
+                    size = Integer.parseInt(br.readLine().split(" ")[2]);  // 사이즈 정보 파싱
                     break;
                 }
             }
@@ -90,10 +117,11 @@ public class Service {
         return size;
     }
 
+
     public static void createNewData(String name, int sequence) {
 
-        String fileName = "data.txt";
-        String filePath = "./src/Data/" + fileName; // 현재 디렉토리에 생성
+        String fileName = "HCIdata.txt";
+        String filePath = "./" + fileName; // 현재 디렉토리에 생성
 
         File file = new File(filePath);
 
@@ -129,8 +157,8 @@ public class Service {
     }
 
     public static void deleteGarbageData(int level) {
-        String fileName = "data.txt";
-        String filePath = "./src/Data/" + fileName; // 현재 디렉토리
+        String fileName = "HCIdata.txt";
+        String filePath = "./" + fileName; // 현재 디렉토리에 생성
         File inputFile = new File(filePath);
 
         String regex = "^" + Integer.toString(level) + "\\s+\\S+\\b.*$";
@@ -165,8 +193,8 @@ public class Service {
 
     public static void save(int sequence, int level, double time, int targetX, int targetY, int cursorX, int cursorY, double r){
 
-        String fileName = "data.txt";
-        String filePath = "./src/Data/" + fileName; // 현재 디렉토리에 생성
+        String fileName = "HCIdata.txt";
+        String filePath = "./" + fileName; // 현재 디렉토리에 생성
 
         double distance=distance(cursorX,cursorY,targetX,targetY);
         boolean isInside=isInsideTarget(r, cursorX,cursorY,targetX,targetY);

@@ -1,6 +1,6 @@
-package Game;
+package main.java.Game;
 
-import Service.Service;
+import main.java.Service.Service;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,12 +44,13 @@ public class StartFrame extends JFrame {
         add(orderField);
 
         // 설명 라벨 생성
-        JLabel startLabel = new JLabel("<html>Lorem ipsum dolor sit amet, consectetur adipiscing elit,<br>" +
-                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>" +
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip<br>" +
-                "ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse<br>" +
-                "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,<br>" +
-                "sunt in culpa qui officia deserunt mollit anim id est laborum.</html>");
+        JLabel startLabel = new JLabel("<html>각 단계는 3초의 준비 시간이 주어집니다.<br>" +
+                "게임 시작시 3초간 원 위에 커서를 위치하세요.<br>" +
+                "3초가 지나면 타겟이 이동하기 시작합니다.<br>" +
+                "타겟 이동 시작시 12초간 커서가 원을 벗어나지 않도록 계속해서 따라가세요.<br>" +
+                "타겟은 8자를 그리며 이동합니다.<br>" +
+                "커서가 게임 프레임 밖을 벗어나지 않도록 조심해주세요.</html>");
+        startLabel.setFont(new Font("Arial", Font.BOLD, 15));
         startLabel.setBounds(10, 200, 580, 120); // 위치와 크기 조정
         add(startLabel);
 
