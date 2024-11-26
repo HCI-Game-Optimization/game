@@ -52,7 +52,7 @@ public class GamePanel extends JPanel implements Runnable{
         levelLabel.setSize(new Dimension(400,200));
         levelLabel.setFont(new Font("Arial", Font.BOLD, 20));
         levelLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        levelLabel.setText("level: " + level + "/16");
+        levelLabel.setText("level: " + (level+1) + "/16");
         add(levelLabel);
 
         initGame();
@@ -121,7 +121,6 @@ public class GamePanel extends JPanel implements Runnable{
                 if(cursor_X == -1) {
                     // 다시 이번 단계 처음으로 이동
                     level -= 1;
-                    // 데이터도 이번 단계 버리기
                     isBreak = true;
                     break;
                 }
@@ -152,12 +151,14 @@ public class GamePanel extends JPanel implements Runnable{
                 }
                 setCursorCoordinate();
                 if(cursor_X == -1) {
+                    // 이번 단계 데이터 버리기
+                    System.out.println(level);
+                    Service.deleteGarbageData(level);
                     // 다시 이번 단계 처음으로 이동
                     level -= 1;
-                    // 데이터도 이번 단계 버리기
                     break;
                 }
-                save(level, time, target_X, target_Y,  cursor_X,  cursor_Y, targetSize/2);
+                save(sequence, level, time, target_X, target_Y,  cursor_X,  cursor_Y, targetSize/2);
 
                 // 패널 다시 그리기
                 repaint();
@@ -187,7 +188,7 @@ public class GamePanel extends JPanel implements Runnable{
         ready = false;
 
         timeLabel.setText(Double.toString(readyTime));
-        levelLabel.setText("level: " + level + "/16");
+        levelLabel.setText("level: " + (level+1) + "/16");
     }
 
     public void calcInitialSpeed() {

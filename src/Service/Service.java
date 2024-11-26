@@ -1,6 +1,7 @@
 package Service;
 
 import java.io.*;
+import java.util.regex.*;
 
 public class Service {
 
@@ -92,7 +93,7 @@ public class Service {
     public static void createNewData() {
 
         String fileName = "data.txt";
-        String filePath = "./" + fileName; // 현재 디렉토리에 생성
+        String filePath = "./src/Data/" + fileName; // 현재 디렉토리에 생성
 
         File file = new File(filePath);
 
@@ -121,23 +122,61 @@ public class Service {
         }
     }
 
-    public static void save(int level, double time, int targetX, int targetY, int cursorX, int cursorY, double r){
+    public static void deleteGarbageData(int level) {
+        String fileName = "data.txt";
+        String filePath = "./src/Data/" + fileName; // 현재 디렉토리
+        File inputFile = new File(filePath);
+
+        // 정규식: 두 번째 값이 0인 줄
+        String regex = "^\\S+ " + Integer.toString(level) + "\\b.*$";
+        Pattern pattern = Pattern.compile(regex);
+
+        // 데이터를 임시로 저장할 StringBuilder
+        StringBuilder validData = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String currentLine;
+
+            // 조건에 맞는 줄을 제외하고 유효한 데이터만 StringBuilder에 저장
+            while ((currentLine = reader.readLine()) != null) {
+                Matcher matcher = pattern.matcher(currentLine);
+                if (!matcher.matches()) {
+                    validData.append(currentLine).append(System.lineSeparator());
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("파일 읽기 중 오류 발생: " + e.getMessage());
+            return;
+        }
+
+        // 유효한 데이터로 원본 파일 덮어쓰기
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
+            writer.write(validData.toString());
+            System.out.println("조건에 맞는 줄이 삭제되고 파일이 갱신되었습니다.");
+        } catch (IOException e) {
+            System.out.println("파일 쓰기 중 오류 발생: " + e.getMessage());
+        }
+    }
+
+    public static void save(int sequence, int level, double time, int targetX, int targetY, int cursorX, int cursorY, double r){
 
         String fileName = "data.txt";
-        String filePath = "./" + fileName; // 현재 디렉토리에 생성
+        String filePath = "./src/Data/" + fileName; // 현재 디렉토리에 생성
 
         double distance=distance(cursorX,cursorY,targetX,targetY);
         boolean isInside=isInsideTarget(r, cursorX,cursorY,targetX,targetY);
 
         // 작성할 문자열
-        String content = Integer.toString(level) + " "
-                + time+ " "
-                + targetX+ " "
-                + targetY+ " "
-                + cursorX+ " "
-                + cursorY+ " "
-                + distance+ " "
-                + isInside+ "\n" ;
+        String content =
+                sequence + " "
+                + level + " "
+                + time + " "
+                + targetX + " "
+                + targetY + " "
+                + cursorX + " "
+                + cursorY + " "
+                + distance + " "
+                + isInside + "\n" ;
 
         try {
             // 파일 객체 생성
@@ -146,7 +185,6 @@ public class Service {
             // 파일에 문자열 작성
             try (FileWriter writer = new FileWriter(file, true)) {
                 writer.write(content);
-                System.out.println("파일에 문자열을 성공적으로 작성했습니다.");
             }
         } catch (IOException e) {
             System.out.println("파일 처리 중 오류가 발생했습니다: " + e.getMessage());
